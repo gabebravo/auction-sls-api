@@ -1,0 +1,26 @@
+service: auction-sls-api
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  lambdaHashingVersion: 20201221
+  stage: dev
+  profile: gabesls
+  region: 'us-east-1'
+
+functions:
+  hello:
+    handler: src/handlers/hello.handler
+    events:
+      - http:
+          method: GET
+          path: /hello
+
+custom:
+  bundle:
+    linting: false
