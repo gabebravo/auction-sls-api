@@ -9,9 +9,11 @@ provider:
   runtime: nodejs12.x
   memorySize: 256
   lambdaHashingVersion: 20201221
-  stage: dev
+  stage: dev # ${opt:stage, 'dev'}
   profile: gabesls
   region: 'us-east-1'
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iamRoleStatements: # THIS IS IAM ACCESS CONFIG
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM} # :AuctionsTableIAM obj imported form file
 
@@ -28,5 +30,8 @@ functions:
           path: /auction
 
 custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable # gets the DynamoDB name
+    arn: !GetAtt AuctionsTable.Arn # gets the ARN for the DynamoDb table resource
   bundle:
     linting: false

@@ -17,7 +17,7 @@ async function createAuction(event, context) {
   // chaining .promise makes any aws opreation async/await in nature
   await dynamoDb
     .put({
-      TableName: 'AuctionsTable',
+      TableName: process.env.AUCTIONS_TABLE_NAME,
       Item: auction,
     })
     .promise();
