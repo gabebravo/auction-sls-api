@@ -12,26 +12,12 @@ provider:
   stage: dev
   profile: gabesls
   region: 'us-east-1'
-  iamRoleStatements: # THIS IS IAM ACCESS FOR DYNAMODB
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource: # vars below are using serverless-pseudo-parameters lib
-        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/AuctionsTable
+  iamRoleStatements: # THIS IS IAM ACCESS CONFIG
+    - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM} # :AuctionsTableIAM obj imported form file
 
 resources:
-  Resources: # THIS IS THE AWS ARN SETTINGS FOR DYNAMODB
-    AuctionsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: AuctionsTable
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+  Resources: # AWS ARN SETTINGS FOR DYNAMODB, ETC
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable} # :AuctionsTable obj imported form file
 
 functions:
   createAuction:
