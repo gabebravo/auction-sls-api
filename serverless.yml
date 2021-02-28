@@ -12,15 +12,15 @@ provider:
   stage: dev
   profile: gabesls
   region: 'us-east-1'
-  iamRoleStatements:
+  iamRoleStatements: # THIS IS IAM ACCESS FOR DYNAMODB
     - Effect: Allow
       Action:
         - dynamodb:PutItem
-      Resource:
+      Resource: # vars below are using serverless-pseudo-parameters lib
         - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/AuctionsTable
 
 resources:
-  Resources:
+  Resources: # THIS IS THE AWS ARN SETTINGS FOR DYNAMODB
     AuctionsTable:
       Type: AWS::DynamoDB::Table
       Properties:
