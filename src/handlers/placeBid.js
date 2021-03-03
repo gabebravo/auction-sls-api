@@ -11,7 +11,7 @@ async function placeBid(event, context) {
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     Key: { id },
-    updateExpression: 'set highestBid.amount = :amount', // get highestBid.amount in auction obj and set to amount from route
+    UpdateExpression: 'set highestBid.amount = :amount', // get highestBid.amount in auction obj and set to amount from route
     ExpressionAttributeValues: {
       // how dynamoDb gets amount from the route above and sets it
       ':amount': amount,
@@ -27,6 +27,10 @@ async function placeBid(event, context) {
   } catch (error) {
     console.log('error', error);
     throw new createError.InternalServerError(error);
+  }
+
+  if (!auction) {
+    throw new createError.NotFound(`Auction with ID "${id}" not found`);
   }
 
   return {
