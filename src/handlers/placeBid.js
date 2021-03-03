@@ -13,7 +13,7 @@ async function placeBid(event, context) {
     Key: { id },
     updateExpression: 'set highestBid.amount = :amount', // get highestBid.amount in auction obj and set to amount from route
     ExpressionAttributeValues: {
-      // how dynamoDb gets amountfrom the route above and sets it
+      // how dynamoDb gets amount from the route above and sets it
       ':amount': amount,
     },
     ReturnValues: 'ALL_NEW', // tells dynamoDb what to return once the operation is complete
@@ -23,14 +23,10 @@ async function placeBid(event, context) {
 
   try {
     const result = await dynamoDb.update(params).promise();
-    updatedAuction = result.Attributes; // Attributes = retruns all attributes from the auction just updated
+    updatedAuction = result.Attributes; // Attributes = returns all attributes from the auction just updated
   } catch (error) {
     console.log('error', error);
     throw new createError.InternalServerError(error);
-  }
-
-  if (!auction) {
-    throw new createError.NotFound(`Auction with ID "${id}" not found`);
   }
 
   return {
