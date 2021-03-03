@@ -6,7 +6,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 async function placeBid(event, context) {
   const { id } = event.pathParameters; // get param value from route
-  const { anount } = event.body; // get value from PATCH body
+  const { amount } = event.body; // get value from PATCH body
 
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
