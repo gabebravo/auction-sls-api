@@ -14,6 +14,9 @@ async function createAuction(event, context) {
     title,
     status: 'OPEN',
     createdAt: now.toISOString(),
+    highestBid: {
+      amount: 0,
+    },
   };
 
   // chaining .promise makes any aws opreation async/await in nature

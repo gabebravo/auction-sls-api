@@ -4,5 +4,6 @@ AuctionsTableIAM:
     - dynamodb:PutItem
     - dynamodb:Scan
     - dynamodb:GetItem
+    - dynamodb:UpdateItem
   Resource: # vars below are using serverless-pseudo-parameters lib
     - ${self:custom.AuctionsTable.arn} # ${self:custom.AuctionsTable.arn} = serverless.yml : { custom: { AuctionsTable: <valueFromAWS> } }
