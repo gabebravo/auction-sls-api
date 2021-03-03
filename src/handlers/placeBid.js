@@ -1,12 +1,21 @@
 import AWS from 'aws-sdk';
-import commonMiddy from '../utils/commonMiddy';
 import createError from 'http-errors';
+import commonMiddy from '../utils/commonMiddy';
+import { getAuctionById } from './getAuction';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 async function placeBid(event, context) {
   const { id } = event.pathParameters; // get param value from route
   const { amount } = event.body; // get value from PATCH body
+
+  const auction = await getAuctionById(id);
+
+  if (amount <= auction.highestBid.amount) {
+    throw new createError.Forbidden(
+      `Your bid must be hire than ${auction.highestBid.amount}`
+    );
+  }
 
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,

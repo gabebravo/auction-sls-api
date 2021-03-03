@@ -1,12 +1,11 @@
 import AWS from 'aws-sdk';
-import commonMiddy from '../utils/commonMiddy';
 import createError from 'http-errors';
+import commonMiddy from '../utils/commonMiddy';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-async function getAuction(event, context) {
+export async function getAuctionById(id) {
   let auction;
-  const { id } = event.pathParameters; // get param value from route
 
   try {
     const result = await dynamoDb
@@ -25,6 +24,13 @@ async function getAuction(event, context) {
   if (!auction) {
     throw new createError.NotFound(`Auction with ID "${id}" not found`);
   }
+
+  return auction;
+}
+
+async function getAuction(event, context) {
+  const { id } = event.pathParameters; // get param value from route
+  const auction = await getAuctionById(id);
 
   return {
     statusCode: 200,
